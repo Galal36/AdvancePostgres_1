@@ -1,0 +1,121 @@
+1. Create Tables
+CREATE TABLE track (
+    id SERIAL PRIMARY KEY,
+    track_name VARCHAR(100)
+);
+
+CREATE TABLE subject (
+    id SERIAL PRIMARY KEY,
+    sub_name VARCHAR(100),
+    max_score INT
+);
+
+CREATE TABLE student (
+    id SERIAL PRIMARY KEY,
+    e_name VARCHAR(100),
+    email VARCHAR(100),
+    address VARCHAR(255),
+    track_id INT,
+    birth_date DATE,
+    gender VARCHAR(6) CHECK (gender IN ('Male', 'Female')),
+    CONSTRAINT fk_track FOREIGN KEY (track_id) REFERENCES track(id)
+);
+
+CREATE TABLE exam (
+    id SERIAL PRIMARY KEY,
+    date DATE
+);
+
+CREATE TABLE grades (
+    stu_id INT,
+    sub_id INT,
+    exam_id INT,
+    grade INT,
+    PRIMARY KEY (stu_id, sub_id, exam_id),
+    FOREIGN KEY (stu_id) REFERENCES student(id),
+    FOREIGN KEY (sub_id) REFERENCES subject(id),
+    FOREIGN KEY (exam_id) REFERENCES exam(id)
+);
+
+CREATE TABLE stu_sub (
+    stu_id INT,
+    sub_id INT,
+    PRIMARY KEY (stu_id, sub_id),
+    FOREIGN KEY (stu_id) REFERENCES student(id),
+    FOREIGN KEY (sub_id) REFERENCES subject(id)
+);
+
+CREATE TABLE track_sub (
+    track_id INT,
+    sub_id INT,
+    PRIMARY KEY (track_id, sub_id),
+    FOREIGN KEY (track_id) REFERENCES track(id),
+    FOREIGN KEY (sub_id) REFERENCES subject(id)
+);
+
+
+2. Insert  3 Rows into Each Table
+
+INSERT INTO track (track_name) VALUES
+('Science'), ('Arts'), ('Commerce');
+
+INSERT INTO subject (sub_name, max_score) VALUES
+('Math', 100), ('History', 80), ('Physics', 90);
+
+INSERT INTO student (e_name, email, address, track_id, birth_date, gender) VALUES
+('Jalal', 'jol@gmail.com', '123 Main St', 1, '1990-05-20', 'Male'),
+('Ali', 'ali@gmail.com', '456 Elm St', 2, '1992-11-15', 'Male'),
+('Anwer', 'noor@gmail.com', '789 Oak St', 1, '1989-03-10', 'Male');
+
+INSERT INTO exam (date) VALUES
+('2025-04-01'), ('2025-04-15'), ('2025-04-29');
+
+INSERT INTO grades (stu_id, sub_id, exam_id, grade) VALUES
+(1, 1, 1, 85),
+(2, 2, 2, 75),
+(3, 3, 3, 95);
+
+INSERT INTO stu_sub (stu_id, sub_id) VALUES
+(1, 1), (2, 2), (3, 3);
+
+INSERT INTO track_sub (track_id, sub_id) VALUES
+(1, 1), (2, 2), (1, 3);
+
+
+Queries
+
+6. Male students born before 1991-10-01
+
+SELECT e_name FROM student WHERE gender = 'Male' AND birth_date < '1991-10-01';
+
+7. Students’ names starting with A
+
+SELECT e_name FROM student WHERE e_name LIKE 'A%';
+
+8. Subjects sorted by max score
+
+SELECT sub_name, max_score FROM subject ORDER BY max_score DESC;
+
+9. Subject with the highest max score
+
+SELECT sub_name, max_score FROM subject ORDER BY max_score DESC LIMIT 1;
+
+10. Count of students named "Mohammed"
+
+SELECT COUNT(*) FROM student WHERE e_name = 'Mohammed';
+
+11. Count of males and females
+
+SELECT gender, COUNT(*) FROM student GROUP BY gender;
+
+12. Repeated first names with count > 2
+
+SELECT e_name, COUNT(*) FROM student GROUP BY e_name HAVING COUNT(*) > 2;
+
+13. Students and their track names
+
+SELECT s.e_name, t.track_name
+FROM student s
+JOIN track t ON s.track_id = t.id;
+
+
