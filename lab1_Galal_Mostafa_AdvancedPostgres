@@ -18,7 +18,7 @@ CREATE TABLE student (
     track_id INT,
     birth_date DATE,
     gender VARCHAR(6) CHECK (gender IN ('Male', 'Female')),
-    CONSTRAINT fk_track FOREIGN KEY (track_id) REFERENCES track(id)
+    FOREIGN KEY (track_id) REFERENCES track(id)
 );
 
 CREATE TABLE exam (
