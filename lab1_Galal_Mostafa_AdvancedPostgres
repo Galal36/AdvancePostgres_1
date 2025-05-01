@@ -84,6 +84,12 @@ INSERT INTO track_sub (track_id, sub_id) VALUES
 
 Queries
 
+3- in line 19 (this file)
+
+4-in line 20
+
+5-foreign keys already added in the tables(done)
+
 6. Male students born before 1991-10-01
 
 SELECT e_name FROM student WHERE gender = 'Male' AND birth_date < '1991-10-01';
